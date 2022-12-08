@@ -226,14 +226,23 @@ fn main() {
 
     println!("{}", Dir::new().is_leaf());
 
-    let sizes: usize = tld
+    let total_size: usize = tld
         .flatten()
         .into_iter()
         .filter(|a| a.get_size() <= 100000)
         .map(|a| a.get_size())
         .sum();
 
-    println!("{}", sizes);
+    let space_needed = 30000000 - (70000000 - tld.get_size());
+    let mut dirs = tld.flatten();
+    dirs.sort_by(|a, b| a.get_size().cmp(&b.get_size()));
+
+    dirs = dirs
+        .into_iter()
+        .filter(|a| a.get_size() >= space_needed)
+        .collect();
+
+    println!("{}", dirs.get(0).unwrap().get_size());
 
     let chom = tld.entries.clone();
 }
